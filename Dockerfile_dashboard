@@ -1,0 +1,20 @@
+#
+FROM python:3.9
+
+#
+RUN mkdir /app
+WORKDIR /app
+
+#
+COPY ./requirements_dashboard.txt requirements.txt
+
+#
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
+
+#
+COPY ./app_dashboard.py ./app.py
+COPY ./dashboard ./dashboard
+
+#
+EXPOSE 80
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "dashboard.app:server"]

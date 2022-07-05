@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile_api
+    ports:
+      - "8889:80"
+  frontend:
+    build:
+        context: .
+        dockerfile: Dockerfile_dashboard
+    environment:
+        URL_BACKEND: "http://backend"
+    ports:
+      - "8888:80"
+    links:
+      - backend
