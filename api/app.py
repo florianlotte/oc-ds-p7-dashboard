@@ -87,7 +87,10 @@ def get_credit_by_id(credit_id: int):
     try:
         res = data.loc[credit_id].copy()
         pred = model_app.model.predict_proba(res[model_app.feats].to_frame().transpose())
-        score = 1 - (pred[0][1] * 0.5 / model_app.threshold)
+        if pred[0][1] > model_app.threshold:
+            score = (1 - pred[0][1]) * 0.5 / (1 - model_app.threshold)
+        else:
+            score = 1 - (pred[0][1] * 0.5 / model_app.threshold)
         res["PROBA"] = pred[0][1]
         res["SCORE"] = round(score * 100)
         res["SK_ID_CURR"] = res.name
